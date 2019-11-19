@@ -2,6 +2,7 @@ import React from 'react';
 import Axios from 'axios';
 import nasaApi from '../../../NASA_KEY.js';
 import Apod from './Apod.jsx';
+// import RoverList from './RoverList.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -9,6 +10,7 @@ class App extends React.Component {
     this.state = {
       apod: {},
       issPosition: {},
+      rovers: [],
       curiosity: {},
       spirit: {},
       opportunity: {},
@@ -20,11 +22,28 @@ class App extends React.Component {
     this.getSpiritInfo = this.getSpiritInfo.bind(this);
     this.getOpportunityInfo = this.getOpportunityInfo.bind(this);
     this.getPeople = this.getPeople.bind(this);
+    this.getRovers = this.getRovers.bind(this);
+
+    this.setRovers = this.setRovers.bind(this);
+    this.setCuriosity = this.setCuriosity.bind(this);
+    this.setSpirit = this.setSpirit.bind(this);
+    this.setOpportunity = this.setOpportunity.bind(this);
+  }
+
+  // get all rover data
+  getRovers() {
+    Axios.get(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=${nasaApi}`)
+      .then((res) => {
+        console.log('ROVERS call: ', res.data.rovers);
+        this.setState({
+          rovers: res.data.rovers
+        });
+      });
   }
 
   // get nasa astronomy image of the day
   getApod() {
-    Axios.get(`https://api.nasa.gov/planetary/apod?api_key=${nasaApi}`)
+    Axios.get(`https://api.nasa.gov/planetary/apod?api_key=${nasaApi}&date=2019-03-09`)
       .then((res) => {
         // console.log('APOD call: ', res.data);
         this.setState({
@@ -83,13 +102,49 @@ class App extends React.Component {
       });
   }
 
+  setRovers(props) {
+    console.log('ROVERS list: ', this.props.rovers);
+    this.setState({
+      rovers: this.props.rovers
+    });
+  }
+
+  setCuriosity(props) {
+    // console.log('CURIOSITY PROPS: ', this.props.rover[0]);
+    this.setState({
+      curiosity: this.props.rovers[0]
+    });
+  }
+
+  setSpirit(props) {
+    // console.log('SPIRIT PROPS: ', this.props.rover[1]);
+    this.setState({
+      spirit: this.props.rovers[1]
+    });
+  }
+
+  setOpportunity(props) {
+    // console.log('OPPORTUNITY PROPS: ', this.props.rover[2]);
+    this.setState({
+      opportunity: this.props.rovers[2]
+    });
+  }
+
   componentDidMount() {
+    // real data
     this.getApod();
     // this.getIssPosition();
     // this.getCuriosityInfo();
     // this.getSpiritInfo();
     // this.getOpportunityInfo();
     // this.getPeople();
+    // this.getRovers();
+
+    // fake data
+    this.setRovers();
+    this.setCuriosity();
+    this.setSpirit();
+    this.setOpportunity();
   }
 
   render() {
@@ -102,6 +157,9 @@ class App extends React.Component {
         {/* {console.log('OPPORTUNITY: ', this.state.opportunity)} */}
         {/* {console.log('PEOPLE: ', this.state.people)} */}
         <Apod apod={this.state.apod} />
+        {/* <Curiosity curiosity={this.state.curiosity} /> */}
+        {/* <RoverList rovers={this.state.rovers} /> */}
+        {/* <p>Time: {this.props.time}</p> */}
       </div>
     );
   }
