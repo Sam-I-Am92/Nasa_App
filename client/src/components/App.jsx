@@ -43,7 +43,7 @@ class App extends React.Component {
 
   // get nasa astronomy image of the day
   getApod() {
-    Axios.get(`https://api.nasa.gov/planetary/apod?api_key=${nasaApi}&date=2019-03-09`)
+    Axios.get(`https://api.nasa.gov/planetary/apod?api_key=${nasaApi}`)
       .then((res) => {
         // console.log('APOD call: ', res.data);
         this.setState({
